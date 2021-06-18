@@ -1,19 +1,28 @@
 import React from "react";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import classes from "./NewTodo.module.css";
 
 const NewTodo: React.FC<{ onAddTodo: (text: string) => void }> = (props) => {
   const todoTextInputRef = useRef<HTMLInputElement>(null);
 
+  useEffect(() => {
+    if (!todoTextInputRef.current) {
+      return;
+    }
+    todoTextInputRef.current.focus();
+  }, []);
+
   const submitHandler = (event: React.FormEvent) => {
     event.preventDefault();
-    const enteredText = todoTextInputRef.current!.value;
+    let enteredText = todoTextInputRef.current!.value;
     if (enteredText.trim().length === 0) {
       // Throw an error
       return;
     }
     props.onAddTodo(enteredText);
   };
+
+
 
   return (
     <form className={classes.form} onSubmit={submitHandler}>
