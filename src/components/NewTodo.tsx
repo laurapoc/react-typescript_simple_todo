@@ -1,8 +1,9 @@
 import React from "react";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import classes from "./NewTodo.module.css";
 
 const NewTodo: React.FC<{ onAddTodo: (text: string) => void }> = (props) => {
+  const [inputValue, setInputValue] = useState("");
   const todoTextInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -20,14 +21,18 @@ const NewTodo: React.FC<{ onAddTodo: (text: string) => void }> = (props) => {
       return;
     }
     props.onAddTodo(enteredText);
+    setInputValue("");
   };
 
-
+  const resetFormHandler = (event: React.FormEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    setInputValue(event.currentTarget.value);
+  };
 
   return (
     <form className={classes.form} onSubmit={submitHandler}>
       <label htmlFor="text">Todo text</label>
-      <input type="text" id="text" ref={todoTextInputRef} />
+      <input type="text" id="text" ref={todoTextInputRef} value={inputValue} onChange={resetFormHandler} />
       <button>Add Todo</button>
     </form>
   );
